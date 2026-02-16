@@ -15,5 +15,5 @@ fn parse_client_ip(proxy_addr: &SocketAddr, headers: &HeaderMap) -> String {
         .and_then(|value| value.to_str().ok())
         .and_then(|s| s.split(",").next())
         .map(|s| s.trim().to_string())
-        .unwrap_or_else(|| format!("Proxy: {}", proxy_addr.ip()))
+        .unwrap_or_else(|| format!("proxy: {}", proxy_addr.ip()))
 }

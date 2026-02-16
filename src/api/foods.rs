@@ -54,6 +54,8 @@ pub(crate) async fn food(
 
 pub(crate) async fn foods(
     State(shared_state): State<SharedState>,
+    ConnectInfo(addr): ConnectInfo<SocketAddr>,
+    headers: HeaderMap,
 ) -> Json<BTreeMap<&'static str, String>> {
     // Henüz test etmedim ama ne olur ne olmaz diye to_owned atıyorum birkaç ms olsa bile config'e blok atılmaması için
     let api_base_url = &shared_state.config.lock().await.api.base_url.to_owned();
@@ -71,12 +73,19 @@ pub(crate) async fn foods(
         ),
     );
 
+    debug!(
+        "GET /foods: ({} bağlantı noktası), {}",
+        endpoints.len(),
+        parse_client_ip(&addr, &headers)
+    );
     Json(endpoints)
 }
 
 // HashMap yerine BTreeMap kullanma sebebimiz, yemek isimlerini alfabetik sıralamak istememiz. HashMap kullansaydık her seferinde rastgele sıralama olacaktı
 pub(crate) async fn foods_list(
     State(shared_state): State<SharedState>,
+    ConnectInfo(addr): ConnectInfo<SocketAddr>,
+    headers: HeaderMap,
 ) -> Result<Json<BTreeMap<String, String>>, APIError> {
     let slugs = database::select_all_foods_slugs(&*shared_state.api_db.lock().await)
         .await
@@ -93,6 +102,11 @@ pub(crate) async fn foods_list(
 
     let api_base_url = &shared_state.config.lock().await.api.base_url;
 
+    debug!(
+        "GET /foods/list: ({} yemek), {}",
+        slugs.len(),
+        parse_client_ip(&addr, &headers)
+    );
     Ok(Json(
         slugs
             .into_iter()
@@ -122,7 +136,7 @@ pub(crate) async fn tags_list(
         })?;
 
     debug!(
-        "GET /tags: ({} tags), {}",
+        "GET /tags: ({} etiket), {}",
         tags.len(),
         parse_client_ip(&addr, &headers)
     );
