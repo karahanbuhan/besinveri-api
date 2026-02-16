@@ -76,9 +76,11 @@ pub(crate) async fn health(
         last_updated: timestamp,
     };
 
-    let client_ip = parse_client_ip(&addr, &headers);
-    
-    debug!("GET /health: ({}), {}", health.status, client_ip);
+    debug!(
+        "GET /health: ({}), {}",
+        health.status,
+        parse_client_ip(&addr, &headers)
+    );
     Json(health)
 }
 

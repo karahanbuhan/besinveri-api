@@ -1,18 +1,18 @@
-use std::collections::BTreeMap;
+use std::{collections::BTreeMap, net::SocketAddr};
 
 use axum::{
     Json,
-    extract::{Path, Query, State},
-    http::StatusCode,
+    extract::{ConnectInfo, Path, Query, State},
+    http::{HeaderMap, StatusCode},
 };
 
 use anyhow::Result;
 use serde::Deserialize;
-use tracing::error;
+use tracing::{debug, error};
 
 use crate::{
     SharedState,
-    api::{database, error::APIError},
+    api::{database, error::APIError, parse_client_ip},
     core::food::Food,
 };
 
@@ -105,6 +105,8 @@ pub(crate) async fn foods_list(
 
 pub(crate) async fn tags_list(
     State(shared_state): State<SharedState>,
+    ConnectInfo(addr): ConnectInfo<SocketAddr>,
+    headers: HeaderMap,
 ) -> Result<Json<Vec<String>>, APIError> {
     let tags = database::select_all_tags(&*shared_state.api_db.lock().await)
         .await
@@ -119,6 +121,11 @@ pub(crate) async fn tags_list(
             )
         })?;
 
+    debug!(
+        "GET /tags: ({} tags), {}",
+        tags.len(),
+        parse_client_ip(&addr, &headers)
+    );
     Ok(Json(tags))
 }
 
