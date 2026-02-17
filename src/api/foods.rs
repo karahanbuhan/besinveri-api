@@ -163,6 +163,8 @@ impl SearchParams {
 pub(crate) async fn foods_search(
     params: Query<SearchParams>,
     State(shared_state): State<SharedState>,
+    ConnectInfo(addr): ConnectInfo<SocketAddr>,
+    headers: HeaderMap,
 ) -> Result<Json<Vec<Food>>, APIError> {
     // Parametrelerin boyutunun 96 baytı geçmesini beklemiyoruz, DoS tarzı saldırıları önlemek için böyle bir önlem alıyoruz
     if params.size() > 96 {
@@ -233,6 +235,14 @@ pub(crate) async fn foods_search(
     // Kalan yemeklerin de resim URL'lerini düzeltiyoruz
     fix_image_urls(&State(shared_state), &mut foods).await;
 
+    debug!(
+        "GET /foods/search: mod={}, limit={}, sorgu=\"{}\", ({} yemek), {}",
+        mode.as_str(),
+        limit,
+        &params.q,
+        foods.len(),
+        parse_client_ip(&addr, &headers)
+    );
     Ok(Json(foods))
 }
 
