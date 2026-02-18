@@ -19,6 +19,8 @@ use crate::{
 pub(crate) async fn food(
     Path(slug): Path<String>,
     State(shared_state): State<SharedState>,
+    ConnectInfo(addr): ConnectInfo<SocketAddr>,
+    headers: HeaderMap,
 ) -> Result<Json<Food>, APIError> {
     // Girilen yemek isminin, istediğimiz limitler içinde olduğuna emin olalım, DoS'a karşı karakter limiti ekleyelim.
     if slug.is_empty() || slug.len() > 100 {
@@ -30,7 +32,7 @@ pub(crate) async fn food(
 
     sanitize_input(&slug)?;
 
-    let mut food = database::select_food_by_slug(&*shared_state.api_db.lock().await, slug)
+    let mut food = database::select_food_by_slug(&*shared_state.api_db.lock().await, &slug)
         .await
         .map_err(|e| {
             error!("Veritabanı yemek bilgisi sorgularken hata oluştu: {:?}", e);
@@ -43,6 +45,11 @@ pub(crate) async fn food(
     fix_image_url(&State(shared_state), &mut food).await;
 
     if food.verified.is_some_and(|verified| verified) {
+        debug!(
+            "GET /food: ({}), {}",
+            slug,
+            parse_client_ip(&addr, &headers)
+        );
         Ok(Json(food))
     } else {
         Err(APIError::new(

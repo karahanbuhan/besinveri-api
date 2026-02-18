@@ -306,7 +306,7 @@ const SELECT_FOOD_SQL_QUERY: &str = r#"
         LEFT JOIN food_sources FS ON FS.id = F.source_id
         "#;
 
-pub(crate) async fn select_food_by_slug(pool: &SqlitePool, slug: String) -> Result<Food, Error> {
+pub(crate) async fn select_food_by_slug(pool: &SqlitePool, slug: &str) -> Result<Food, Error> {
     Ok(
         sqlx::query_as(&format!("{} WHERE F.slug = ?", SELECT_FOOD_SQL_QUERY))
             .bind(slug)
@@ -658,7 +658,7 @@ mod tests {
         insert_food(&pool, test_food).await?;
 
         // select_food_by_slug çağır
-        let result = select_food_by_slug(&pool, "test-food".to_owned()).await?;
+        let result = select_food_by_slug(&pool, "test-food").await?;
 
         // Temel field'ları kontrol et
         assert_eq!(result.slug, Some("test-food".to_owned()));
@@ -676,7 +676,7 @@ mod tests {
         sqlx::migrate!("./migrations/foods").run(&pool).await?;
 
         // Boş tablo
-        let result = select_food_by_slug(&pool, "nonexistent".to_owned()).await;
+        let result = select_food_by_slug(&pool, "nonexistent").await;
         assert!(result.is_err(), "Food bulunamadı hatası bekleniyor");
 
         info!("select_food_by_slug not found testi geçti.");
@@ -766,8 +766,8 @@ mod tests {
         insert_food(&pool, food2).await?;
 
         // Her ikisini de bul
-        let apple = select_food_by_slug(&pool, "apple".to_owned()).await?;
-        let banana = select_food_by_slug(&pool, "banana".to_owned()).await?;
+        let apple = select_food_by_slug(&pool, "apple").await?;
+        let banana = select_food_by_slug(&pool, "banana").await?;
 
         assert_eq!(apple.description, "Apple");
         assert_eq!(apple.energy, 52.0);
@@ -877,7 +877,7 @@ mod tests {
         insert_food(&pool, test_food).await?;
 
         // Relations'ı test et (boş dönebilir, ama hata vermemeli)
-        let food = select_food_by_slug(&pool, "relations-test".to_owned()).await?;
+        let food = select_food_by_slug(&pool, "relations-test").await?;
 
         // Temel field'lar
         assert_eq!(food.description, "Relations Test");
