@@ -4,7 +4,8 @@ use anyhow::Error;
 use axum::{
     Router, ServiceExt,
     extract::Request,
-    middleware::{self},
+    middleware::{self, Next},
+    response::Response,
     routing::get,
 };
 use axum_client_ip::ClientIpSource;
@@ -13,7 +14,7 @@ use axum_helmet::{Helmet, HelmetLayer};
 use lazy_limit::{Duration, RuleConfig, init_rate_limiter};
 use moka::future::Cache;
 use real::RealIpLayer;
-use reqwest::Method;
+use reqwest::{Method, header};
 use sqlx::{Pool, Sqlite};
 use tokio::{net::TcpListener, sync::Mutex};
 use tower::Layer;
@@ -56,7 +57,7 @@ impl SharedState {
 async fn main() -> Result<(), Error> {
     // Bu state içinde veritabanı, config ve cache'i barındırıyor. Diğer route'lardan erişmek için kullanıyoruz asenkron olarak
     let shared_state = SharedState::new().await?;
-    
+
     // http(s)://alanadi.com/API/NEST/PATH -> Bu şekilde girildiğinde /API/NEST/PATH'i kullanacağız nest için
     // Scope içine açıyorum ownership sorununu düzeltmek için, ayrıca String kullanmamız gerekecek referans kullanamayız burada
     let api_path: String = {
@@ -158,4 +159,23 @@ fn api_router(shared_state: SharedState) -> Router {
                 .add(helmet_core::ReferrerPolicy::no_referrer()),
         ))
         .layer(middleware::from_fn(api::error::handle_axum_rejections)) // Bu da axum'un kendi hataları için, özellikle deserializasyon gibi hatalar için JSON çevirici
+        .layer(middleware::from_fn(utf8_header_middleware)) // Content Type header'ına UTF8 eklemek için bu middleware'i kullanıyoruz
+}
+
+async fn utf8_header_middleware(request: Request, next: Next) -> Response {
+    // Bu middleware'i daha gömülü yapabiliriz gelecekte performansı arttırmak için mevcut cache/route mekanizmalarına
+    let mut response = next.run(request).await;
+    let headers = response.headers_mut();
+    if let Some(content_type) = headers.get(header::CONTENT_TYPE) {
+        if let Ok(content_type) = content_type.to_str() {
+            // Axum kendisi eklemiyor ama yine de bir teksir durumu olmaması için kontrol edelim charset var mı diye
+            if !content_type.to_lowercase().contains("charset") {
+                let content_type = format!("{}; charset=utf-8", content_type);
+                if let Ok(new_val) = header::HeaderValue::from_str(&content_type) {
+                    headers.insert(header::CONTENT_TYPE, new_val);
+                }
+            }
+        }
+    }
+    response
 }
