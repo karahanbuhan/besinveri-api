@@ -1,0 +1,45 @@
+[
+  {
+    "description": "Patates Kızartması",
+    "image_url": "/images/foods/patates-kizartmasi.webp",
+    "tags": [
+      "fast food",
+      "atıştırmalık",
+      "yağlı",
+      "kızartma",
+      "lezzetli",
+      "doyurucu"
+    ],
+    "allergens": [],
+    "servings": {
+      "Adet (Orta)": 30,
+      "Porsiyon (Orta)": 80,
+      "Avuç": 15
+    },
+    "glycemic_index": 75,
+    "energy": 290,
+    "carbohydrate": 40.7,
+    "protein": 3.4,
+    "fat": 14.7,
+    "saturated_fat": 2.3,
+    "trans_fat": 0.1,
+    "sugar": 0.3,
+    "fiber": 3.8,
+    "water": 32,
+    "cholesterol": 0,
+    "sodium": 210,
+    "potassium": 579,
+    "iron": 0.8,
+    "magnesium": 35.0,
+    "calcium": 18,
+    "zinc": 0.5,
+    "vitamin_a": 0.00,
+    "vitamin_b6": 0.37,
+    "vitamin_b12": 0,
+    "vitamin_c": 4.7,
+    "vitamin_d": 0,
+    "vitamin_e": 1.7,
+    "vitamin_k": 0.01,
+    "source": "karahanbuhan"
+  }
+]

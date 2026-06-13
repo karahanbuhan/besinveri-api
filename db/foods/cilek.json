@@ -1,4 +1,5 @@
-{
+[
+  {
     "description": "Çilek",
     "image_url": "/images/foods/cilek.webp",
     "tags": [
@@ -52,3 +53,4 @@
     "vitamin_k": 0,
     "source": "karahanbuhan"
   }
+]

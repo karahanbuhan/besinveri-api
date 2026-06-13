@@ -1,0 +1,53 @@
+[
+  {
+    "description": "Kayısı",
+    "image_url": "/images/foods/kayisi.webp",
+    "tags": [
+      "meyve",
+      "tatlı",
+      "atıştırmalık",
+      "ferahlatıcı",
+      "lif",
+      "c vitamini",
+      "turuncu",
+      "yaz",
+      "diyet",
+      "düşük kalori",
+      "vegan",
+      "glutensiz",
+      "antioksidan",
+      "bahar",
+      "smoothie"
+    ],
+    "allergens": [],
+    "servings": {
+      "Adet (Orta)": 30,
+      "Porsiyon (Orta)": 120
+    },
+    "glycemic_index": 57,
+    "energy": 47,
+    "carbohydrate": 10,
+    "protein": 1.3,
+    "fat": 0.39,
+    "saturated_fat": 0,
+    "trans_fat": 0,
+    "sugar": 8.7,
+    "fiber": 2,
+    "water": 84,
+    "cholesterol": 0,
+    "sodium": 1,
+    "potassium": 259,
+    "iron": 0.4,
+    "magnesium": 10.0,
+    "calcium": 12,
+    "zinc": 0.3,
+    "vitamin_a": 0.00,
+    "vitamin_b6": 0.02,
+    "vitamin_b12": 0,
+    "vitamin_c": 10.2,
+    "vitamin_d": 0,
+    "vitamin_e": 0.01,
+    "vitamin_k": 0,
+    "source": "karahanbuhan"
+  }
+]
