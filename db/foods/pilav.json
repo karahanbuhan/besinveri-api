@@ -1,19 +1,16 @@
 [
   {
-    "description": "Tereyağlı Pilav",
+    "description": "Pilav",
     "image_url": "/images/foods/pilav.webp",
     "tags": [
       "tuzlu",
-      "tereyağlı",
       "karbonhidrat",
       "yüksek kalori"
     ],
     "allergens": [],
     "servings": {
-      "Adet (Orta)": 80,
-      "Kase (Küçük)": 50,
-      "Su Bardağı Dilimlenmiş": 180,
-      "Avuç": 50
+      "Kase (Orta) - Pişirilmiş": 110,
+      "Avuç - Pişirilmiş": 50
     },
     "glycemic_index": 72,
     "energy": 130,
