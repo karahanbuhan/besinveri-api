@@ -1,0 +1,44 @@
+[
+  {
+    "description": "Tereyağlı Pilav",
+    "image_url": "/images/foods/pilav.webp",
+    "tags": [
+      "tuzlu",
+      "tereyağlı",
+      "karbonhidrat",
+      "yüksek kalori"
+    ],
+    "allergens": [],
+    "servings": {
+      "Adet (Orta)": 80,
+      "Kase (Küçük)": 50,
+      "Su Bardağı Dilimlenmiş": 180,
+      "Avuç": 50
+    },
+    "glycemic_index": 72,
+    "energy": 130,
+    "carbohydrate": 28,
+    "protein": 2.5,
+    "fat": 0.28,
+    "saturated_fat": 0,
+    "trans_fat": 0,
+    "sugar": 0.1,
+    "fiber": 0.4,
+    "water": 65.8,
+    "cholesterol": 0,
+    "sodium": 1,
+    "potassium": 0.4,
+    "iron": 0,
+    "magnesium": 0.1,
+    "calcium": 0.1,
+    "zinc": 1,
+    "vitamin_a": 0.00,
+    "vitamin_b6": 0.06,
+    "vitamin_b12": 0,
+    "vitamin_c": 0,
+    "vitamin_d": 0,
+    "vitamin_e": 0.01,
+    "vitamin_k": 0,
+    "source": "karahanbuhan"
+  }
+]
